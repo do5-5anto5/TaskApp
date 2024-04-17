@@ -10,5 +10,6 @@
     <string name="recoverAccount_link">Recuperar conta</string>
     <string name="password_label">Senha</string>
     <string name="btn_recover">ENVIAR</string>
+    <string name="btn_register">REGISTRAR</string>
     <string name="recover_instructions">Informe seu e-mail de cadastro para receber \num link para alteração da conta</string>
 </resources>
