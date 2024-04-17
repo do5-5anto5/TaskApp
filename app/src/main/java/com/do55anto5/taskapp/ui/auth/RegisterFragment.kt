@@ -5,18 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.do55anto5.taskapp.databinding.FragmentLoginBinding
+import com.do55anto5.taskapp.databinding.FragmentRegisterBinding
 
-class LoginFragment : Fragment() {
+class RegisterFragment : Fragment() {
 
-    private var _bind: FragmentLoginBinding? = null
+    private var _bind: FragmentRegisterBinding? = null
     private val bind get() = _bind!!
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _bind = FragmentLoginBinding.inflate(inflater, container, false)
+        _bind = FragmentRegisterBinding.inflate(inflater, container, false)
         return bind.root
     }
 
