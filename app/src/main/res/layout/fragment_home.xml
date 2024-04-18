@@ -27,7 +27,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tabIndicatorColor="@color/white"
-                app:tabRippleColor="#105373"
+                app:tabRippleColor="@color/ripple_default_color"
                 app:tabTextAppearance="@style/CustomTabLayout"
                 app:tabTextColor="@color/white" />
             

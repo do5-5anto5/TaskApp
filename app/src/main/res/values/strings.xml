@@ -1,12 +1,19 @@
 <resources>
+    <!--    labels-->
     <string name="app_name">TaskApp</string>
     <string name="recover_instructions">Informe seu e-mail de cadastro para receber \num link para alteração da conta</string>
+    <string name="desc_label">Descrição</string>
     <string name="email_label">Email</string>
     <string name="password_label">Senha</string>
+    <string name="status_label">Status</string>
+
+    <!--    hints-->
     <string name="edit_email">Digite seu Email</string>
     <string name="edit_password">Digite sua senha</string>
+    <string name="edit_new_login_screen">Criar nova tela de login</string>
 
-    <!--    Links-->
+
+    <!--    links-->
     <string name="createAccount_link">Criar conta</string>
     <string name="recoverAccount_link">Recuperar conta</string>
 
@@ -14,9 +21,18 @@
     <string name="btn_login">LOGIN</string>
     <string name="btn_recover">ENVIAR</string>
     <string name="btn_register">REGISTRAR</string>
+    <string name="btn_save">SALVAR</string>
 
-    <!--    Task Status-->
+    <!--    radio buttons-->
+    <string name="radio_btn_todo">A fazer</string>
+    <string name="radio_btn_doing">Fazendo</string>
+    <string name="radio_btn_done">Feita</string>
+
+    <!--    task status-->
     <string name="status_task_todo">A FAZER</string>
     <string name="status_task_doing">FAZENDO</string>
     <string name="status_task_done">FEITAS</string>
+
+    <!--    Descriptions-->
+    <string name="description_bnt_add">Botão adicionar tarefa</string>
 </resources>
