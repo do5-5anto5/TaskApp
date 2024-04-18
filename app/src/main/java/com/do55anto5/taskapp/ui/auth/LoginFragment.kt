@@ -27,12 +27,17 @@ class LoginFragment : Fragment() {
         initListeners()
     }
 
-    private fun initListeners(){
-        bind.btnRegister.setOnClickListener{
-            findNavController().navigate(R.id.registerFragment)
+    private fun initListeners() {
+        bind.btnLogin.setOnClickListener {
+            findNavController().navigate(R.id.action_global_homeFragment)
         }
-        bind.btnRecover.setOnClickListener{
-            findNavController().navigate(R.id.recoverAccountFragment)
+
+        bind.btnRegister.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+
+        }
+        bind.btnRecover.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_recoverAccountFragment)
         }
     }
 

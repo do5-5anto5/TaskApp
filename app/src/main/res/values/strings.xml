@@ -1,15 +1,22 @@
 <resources>
     <string name="app_name">TaskApp</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="recover_instructions">Informe seu e-mail de cadastro para receber \num link para alteração da conta</string>
     <string name="email_label">Email</string>
+    <string name="password_label">Senha</string>
     <string name="edit_email">Digite seu Email</string>
     <string name="edit_password">Digite sua senha</string>
-    <string name="btn_login">LOGIN</string>
+
+    <!--    Links-->
     <string name="createAccount_link">Criar conta</string>
     <string name="recoverAccount_link">Recuperar conta</string>
-    <string name="password_label">Senha</string>
+
+    <!--    buttons-->
+    <string name="btn_login">LOGIN</string>
     <string name="btn_recover">ENVIAR</string>
     <string name="btn_register">REGISTRAR</string>
-    <string name="recover_instructions">Informe seu e-mail de cadastro para receber \num link para alteração da conta</string>
+
+    <!--    Task Status-->
+    <string name="status_task_todo">A FAZER</string>
+    <string name="status_task_doing">FAZENDO</string>
+    <string name="status_task_done">FEITAS</string>
 </resources>
