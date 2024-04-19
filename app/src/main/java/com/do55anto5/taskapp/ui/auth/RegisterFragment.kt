@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.do55anto5.taskapp.R
 import com.do55anto5.taskapp.databinding.FragmentRegisterBinding
 import com.do55anto5.taskapp.util.initToolbar
+import com.do55anto5.taskapp.util.showBottomSheet
 
 class RegisterFragment : Fragment() {
 
@@ -44,10 +44,10 @@ class RegisterFragment : Fragment() {
             if(password.isNotEmpty()){
                 Toast.makeText(requireContext(), "Happy Way!", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(requireContext(), R.string.editPassword_isEmpty, Toast.LENGTH_SHORT).show()
+                showBottomSheet(message = R.string.editPassword_isEmpty)
             }
         } else {
-            Toast.makeText(requireContext(), R.string.editEmail_isEmpty, Toast.LENGTH_SHORT).show()
+            showBottomSheet(message = R.string.editEmail_isEmpty)
         }
     }
 

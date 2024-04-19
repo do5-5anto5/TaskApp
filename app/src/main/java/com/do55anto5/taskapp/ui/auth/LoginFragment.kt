@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.do55anto5.taskapp.R
 import com.do55anto5.taskapp.databinding.FragmentLoginBinding
+import com.do55anto5.taskapp.util.showBottomSheet
 
 class LoginFragment : Fragment() {
 
@@ -50,10 +51,10 @@ class LoginFragment : Fragment() {
                 findNavController().navigate(R.id.action_global_homeFragment)
                 Toast.makeText(requireContext(), "Happy Way!", Toast.LENGTH_SHORT).show()
             } else {
-            Toast.makeText(requireContext(), R.string.editPassword_isEmpty, Toast.LENGTH_SHORT).show()
+            showBottomSheet(message = R.string.editPassword_isEmpty)
             }
         } else {
-            Toast.makeText(requireContext(), R.string.editEmail_isEmpty, Toast.LENGTH_SHORT).show()
+            showBottomSheet(message = R.string.editEmail_isEmpty)
         }
     }
 
