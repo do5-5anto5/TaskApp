@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.do55anto5.taskapp.databinding.FragmentRegisterBinding
+import com.do55anto5.taskapp.util.initToolbar
 
 class RegisterFragment : Fragment() {
 
@@ -18,6 +19,11 @@ class RegisterFragment : Fragment() {
     ): View {
         _bind = FragmentRegisterBinding.inflate(inflater, container, false)
         return bind.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initToolbar(bind.toolbar)
     }
 
     override fun onDestroyView() {
