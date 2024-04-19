@@ -40,7 +40,7 @@ class FormTaskFragment : Fragment() {
         if (description.isNotEmpty()){
             Toast.makeText(requireContext(), "Happy Way!", Toast.LENGTH_SHORT).show()
         } else {
-            showBottomSheet(message = R.string.editDesc_isEmpty)
+            showBottomSheet(message = getString(R.string.editDesc_isEmpty))
         }
     }
 

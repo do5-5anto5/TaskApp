@@ -21,10 +21,10 @@
     <string name="recoverAccount_link">Recuperar conta</string>
 
     <!--    buttons-->
-    <string name="btn_login">LOGIN</string>
-    <string name="btn_recover">ENVIAR</string>
-    <string name="btn_register">REGISTRAR</string>
-    <string name="btn_save">SALVAR</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_recover">Enviar</string>
+    <string name="btn_register">Criar conta</string>
+    <string name="btn_save">Salvar</string>
 
     <!--    radio buttons-->
     <string name="radio_btn_todo">A fazer</string>

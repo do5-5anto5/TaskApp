@@ -44,10 +44,10 @@ class RegisterFragment : Fragment() {
             if(password.isNotEmpty()){
                 Toast.makeText(requireContext(), "Happy Way!", Toast.LENGTH_SHORT).show()
             } else {
-                showBottomSheet(message = R.string.editPassword_isEmpty)
+                showBottomSheet(message = getString(R.string.editPassword_isEmpty))
             }
         } else {
-            showBottomSheet(message = R.string.editEmail_isEmpty)
+            showBottomSheet(message = getString(R.string.editEmail_isEmpty))
         }
     }
 

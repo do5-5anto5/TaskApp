@@ -59,12 +59,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/bg_edit_text"
-                android:hint="@string/edit_new_login_screen"
-                android:inputType="textEmailAddress"
-                android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                style="@style/EditTextTheme"
+                android:hint="@string/edit_new_login_screen"
+                android:inputType="textEmailAddress"
                 app:layout_constraintTop_toBottomOf="@+id/desc_label" />
 
             <TextView
@@ -119,13 +118,11 @@
                 android:id="@+id/btnSave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_btn"
                 android:text="@string/btn_save"
-                android:textColor="@color/default_color"
-                app:backgroundTint="@null"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rgStatus" />
+                app:layout_constraintTop_toBottomOf="@+id/rgStatus"
+                style="@style/ButtonTheme"/>
 
             <ProgressBar
                 android:id="@+id/progressBar"
