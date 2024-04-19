@@ -5,6 +5,9 @@
     <string name="desc_label">Descrição</string>
     <string name="email_label">Email</string>
     <string name="password_label">Senha</string>
+    <string name="create_account_label">Criar conta</string>
+    <string name="recover_account_label">Recuperar conta</string>
+    <string name="new_task_label">Nova Tarefa</string>
     <string name="status_label">Status</string>
 
     <!--    hints-->
