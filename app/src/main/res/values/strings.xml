@@ -36,6 +36,11 @@
     <string name="status_task_doing">FAZENDO</string>
     <string name="status_task_done">FEITAS</string>
 
-    <!--    Descriptions-->
+    <!--    descriptions-->
     <string name="description_bnt_add">Botão adicionar tarefa</string>
+
+    <!--    toast messages-->
+    <string name="editEmail_isEmpty">Preencha o campo Email</string>
+    <string name="editPassword_isEmpty">Preencha o campo Senha</string>
+    <string name="editDesc_isEmpty">Peencha o campo Criar nova tela de login</string>
 </resources>
