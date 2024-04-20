@@ -48,4 +48,10 @@
     <string name="warning">Atenção</string>
     <string name="title_warning">Atenção</string>
     <string name="btn_warning">Entendi</string>
+
+    <!--    item task-->
+    <string name="create">Criar layout da tela de login</string>
+    <string name="btn_delete">Remover</string>
+    <string name="btn_edit">Editar</string>
+    <string name="btn_details">Detalhes</string>
 </resources>
