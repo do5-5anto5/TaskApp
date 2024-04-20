@@ -42,7 +42,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/btn_edit"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/btn_edit"
-                app:tint="@color/default_color" />
+                app:tint="@color/delete" />
 
             <ImageButton
                 android:id="@+id/btn_next"
