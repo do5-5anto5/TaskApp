@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.do55anto5.taskapp.R
@@ -23,8 +24,7 @@ class ToDoFragment : Fragment() {
     private lateinit var taskAdapter: TaskAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _bind = FragmentToDoBinding.inflate(inflater, container, false)
         return bind.root
@@ -36,18 +36,50 @@ class ToDoFragment : Fragment() {
         initRecyclerView(getTasks())
     }
 
-    private fun initListener(){
+    private fun initListener() {
         bind.fabAdd.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_formTaskFragment)
         }
     }
 
-    private fun initRecyclerView(taskList: List<Task>){
-        taskAdapter = TaskAdapter(requireContext(), taskList)
+    private fun initRecyclerView(taskList: List<Task>) {
+        taskAdapter = TaskAdapter(requireContext(), taskList) { task, option ->
+            selectedOption(task, option)
+        }
 
         bind.rvTasks.layoutManager = LinearLayoutManager(requireContext())
         bind.rvTasks.setHasFixedSize(true)
         bind.rvTasks.adapter = taskAdapter
+    }
+
+    private fun selectedOption(task: Task, option: Int) {
+        when (option) {
+            TaskAdapter.SELECT_REMOVE -> {
+                Toast.makeText(
+                    requireContext(), "Removendo ${task.description}", Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            TaskAdapter.SELECT_EDIT -> {
+                Toast.makeText(
+                    requireContext(), "Editando ${task.description}", Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+
+            TaskAdapter.SELECT_DETAILS -> {
+                Toast.makeText(
+                    requireContext(), "Detalhes ${task.description}", Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+
+            TaskAdapter.SELECT_NEXT -> {
+                Toast.makeText(
+                    requireContext(), "Próximo ${task.description}", Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     private fun getTasks() = listOf(
