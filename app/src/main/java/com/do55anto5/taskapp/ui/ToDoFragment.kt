@@ -7,12 +7,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.do55anto5.taskapp.R
 import com.do55anto5.taskapp.data.model.Status
 import com.do55anto5.taskapp.data.model.Task
 import com.do55anto5.taskapp.databinding.FragmentToDoBinding
 import com.do55anto5.taskapp.ui.adapter.TaskAdapter
+import com.do55anto5.taskapp.ui.adapter.TaskTopAdapter
 
 
 class ToDoFragment : Fragment() {
@@ -21,6 +23,7 @@ class ToDoFragment : Fragment() {
     private val bind get() = _bind!!
 
     private lateinit var taskAdapter: TaskAdapter
+    private lateinit var taskTopAdapter: TaskTopAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -43,14 +46,20 @@ class ToDoFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
+
+        taskTopAdapter = TaskTopAdapter { task, option ->
+            selectedOption(task, option)
+        }
         taskAdapter = TaskAdapter(requireContext()) { task, option ->
             selectedOption(task, option)
         }
 
+        val concatAdapter = ConcatAdapter(taskTopAdapter, taskAdapter)
+
         with(bind.rvTasks){
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
-            adapter = taskAdapter
+            adapter = concatAdapter
         }
     }
 
@@ -85,6 +94,9 @@ class ToDoFragment : Fragment() {
     }
 
     private fun getTasks(){
+        val taskTopList = listOf(
+            Task("0", "'Tarefa do topo'", Status.TODO)
+        )
         val taskList = listOf(
             Task("0", "Criar nova tela do app", Status.TODO),
             Task("1", "Validar informações na tela de login", Status.TODO),
@@ -93,6 +105,7 @@ class ToDoFragment : Fragment() {
             Task("4", "Criar funcionalidade de logout do app", Status.TODO)
         )
 
+        taskTopAdapter.submitList(taskTopList)
         taskAdapter.submitList(taskList)
     }
 
