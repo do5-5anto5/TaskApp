@@ -1,12 +1,11 @@
 package com.do55anto5.taskapp.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.do55anto5.taskapp.R
@@ -33,7 +32,8 @@ class ToDoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initListener()
-        initRecyclerView(getTasks())
+        initRecyclerView()
+        getTasks()
     }
 
     private fun initListener() {
@@ -42,14 +42,16 @@ class ToDoFragment : Fragment() {
         }
     }
 
-    private fun initRecyclerView(taskList: List<Task>) {
-        taskAdapter = TaskAdapter(requireContext(), taskList) { task, option ->
+    private fun initRecyclerView() {
+        taskAdapter = TaskAdapter(requireContext()) { task, option ->
             selectedOption(task, option)
         }
 
-        bind.rvTasks.layoutManager = LinearLayoutManager(requireContext())
-        bind.rvTasks.setHasFixedSize(true)
-        bind.rvTasks.adapter = taskAdapter
+        with(bind.rvTasks){
+            layoutManager = LinearLayoutManager(requireContext())
+            setHasFixedSize(true)
+            adapter = taskAdapter
+        }
     }
 
     private fun selectedOption(task: Task, option: Int) {
@@ -82,13 +84,17 @@ class ToDoFragment : Fragment() {
         }
     }
 
-    private fun getTasks() = listOf(
-        Task("0", "Criar nova tela do app", Status.TODO),
-        Task("1", "Validar informações na tela de login", Status.TODO),
-        Task("2", "Adicionar nova funcionalidade no app", Status.TODO),
-        Task("3", "Salvar token localmente", Status.TODO),
-        Task("4", "Criar funcionalidade de logout do app", Status.TODO)
-    )
+    private fun getTasks(){
+        val taskList = listOf(
+            Task("0", "Criar nova tela do app", Status.TODO),
+            Task("1", "Validar informações na tela de login", Status.TODO),
+            Task("2", "Adicionar nova funcionalidade no app", Status.TODO),
+            Task("3", "Salvar token localmente", Status.TODO),
+            Task("4", "Criar funcionalidade de logout do app", Status.TODO)
+        )
+
+        taskAdapter.submitList(taskList)
+    }
 
     override fun onDestroy() {
         super.onDestroy()

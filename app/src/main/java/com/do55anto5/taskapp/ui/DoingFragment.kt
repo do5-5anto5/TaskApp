@@ -1,13 +1,12 @@
 package com.do55anto5.taskapp.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.do55anto5.taskapp.R
 import com.do55anto5.taskapp.data.model.Status
 import com.do55anto5.taskapp.data.model.Task
 import com.do55anto5.taskapp.databinding.FragmentDoingBinding
@@ -30,17 +29,20 @@ class DoingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initRecyclerView(getTasks())
+        initRecyclerView()
+        getTasks()
     }
 
-    private fun initRecyclerView(taskList: List<Task>) {
-        taskAdapter = TaskAdapter(requireContext(), taskList) { task, option ->
+    private fun initRecyclerView() {
+        taskAdapter = TaskAdapter(requireContext()) { task, option ->
             selectedOption(task, option)
         }
 
-        bind.rvTasks.layoutManager = LinearLayoutManager(requireContext())
-        bind.rvTasks.setHasFixedSize(true)
-        bind.rvTasks.adapter = taskAdapter
+        with(bind.rvTasks){
+            layoutManager = LinearLayoutManager(requireContext())
+            setHasFixedSize(true)
+            adapter = taskAdapter
+        }
     }
 
     private fun selectedOption(task: Task, option: Int) {
@@ -77,13 +79,17 @@ class DoingFragment : Fragment() {
         }
     }
 
-    private fun getTasks() = listOf(
+     private fun getTasks(){
+        val taskList = listOf(
         Task("0", "Validar informações na tela de cadastro", Status.DOING),
         Task("1", "Salvar foto do usuário no banco de dados", Status.DOING),
         Task("2", "Ajustar tela de produtos o app", Status.DOING),
         Task("3", "Criar opção de upload de imagem", Status.DOING),
         Task("4", "Permitir remover os produtos", Status.DOING)
-    )
+     )
+
+        taskAdapter.submitList(taskList)
+    }
 
     override fun onDestroy() {
         super.onDestroy()
