@@ -54,4 +54,9 @@
     <string name="btn_delete">Remover</string>
     <string name="btn_edit">Editar</string>
     <string name="btn_details">Detalhes</string>
+
+    <!--     home fragment-->
+    <string name="dialog_title_confirm_logout">Deseja sair da sua conta?</string>
+    <string name="dialog_button_confirm_logout">Confirmar</string>
+    <string name="dialog_message_confirm_logout">Clique em confirmar para sair da sua conta.</string>
 </resources>
