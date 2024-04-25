@@ -72,6 +72,6 @@
     <!--    form task fragment-->
     <string name="dialog_save_success_form_task_fragment">Tarefa salva com sucesso</string>
 
-    <!--    todo fragment-->
+    <!--    to do fragment-->
 
 </resources>
