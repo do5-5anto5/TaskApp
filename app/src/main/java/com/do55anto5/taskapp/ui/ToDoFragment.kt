@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.do55anto5.taskapp.R
 import com.do55anto5.taskapp.data.model.Status
@@ -110,8 +110,14 @@ class ToDoFragment : Fragment() {
                     val taskList = mutableListOf<Task>()
                     for (ds in snapshot.children){
                         val task = ds.getValue(Task::class.java) as Task
+                        if (task.status == Status.TODO){
                         taskList.add(task)
+                        }
                     }
+
+                    bind.progressBar.isVisible = false
+                    listEmpty(taskList)
+
                     taskAdapter.submitList(taskList)
                 }
 
@@ -120,6 +126,14 @@ class ToDoFragment : Fragment() {
                 }
 
             })
+    }
+
+    private fun listEmpty(taskList: List<Task>){
+        bind.textInfo.text = if(taskList.isEmpty()){
+            getString(R.string.text_task_list_empty)
+        } else {
+            ""
+        }
     }
 
     override fun onDestroy() {
