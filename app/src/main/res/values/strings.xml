@@ -59,4 +59,7 @@
     <string name="dialog_title_confirm_logout">Deseja sair da sua conta?</string>
     <string name="dialog_button_confirm_logout">Confirmar</string>
     <string name="dialog_message_confirm_logout">Clique em confirmar para sair da sua conta.</string>
+
+    <!--    recover fragment-->
+    <string name="dialog_recover_account">Pronto, acabamos de enviar um link de recuperação para o seu email</string>
 </resources>
