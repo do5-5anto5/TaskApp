@@ -14,6 +14,7 @@ import com.do55anto5.taskapp.data.model.Status
 import com.do55anto5.taskapp.data.model.Task
 import com.do55anto5.taskapp.databinding.FragmentToDoBinding
 import com.do55anto5.taskapp.ui.adapter.TaskAdapter
+import com.do55anto5.taskapp.util.showBottomSheet
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -74,9 +75,14 @@ class ToDoFragment : Fragment() {
     private fun selectedOption(task: Task, option: Int) {
         when (option) {
             TaskAdapter.SELECT_REMOVE -> {
-                Toast.makeText(
-                    requireContext(), "Removendo ${task.description}", Toast.LENGTH_SHORT
-                ).show()
+                showBottomSheet(
+                    titleDialog = R.string.text_title_dialog_delete,
+                    titleButton = R.string.text_dialog_button_confirm,
+                    message = getString(R.string.text_message_dialog_delete),
+                    onClick = {
+                        deleteTask(task)
+                    }
+                )
             }
 
             TaskAdapter.SELECT_EDIT -> {
@@ -118,6 +124,7 @@ class ToDoFragment : Fragment() {
                     bind.progressBar.isVisible = false
                     listEmpty(taskList)
 
+                    taskList.reverse()
                     taskAdapter.submitList(taskList)
                 }
 
@@ -126,6 +133,20 @@ class ToDoFragment : Fragment() {
                 }
 
             })
+    }
+
+    private fun deleteTask(task: Task){
+        reference
+            .child("tasks")
+            .child(auth.currentUser?.uid ?: "")
+            .child(task.id)
+            .removeValue().addOnCompleteListener {result ->
+                if (result.isSuccessful){
+                    Toast.makeText(requireContext(), R.string.text_success_delete_task, Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), R.string.generic_error, Toast.LENGTH_SHORT).show()
+                }
+            }
     }
 
     private fun listEmpty(taskList: List<Task>){
