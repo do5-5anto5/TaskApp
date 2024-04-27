@@ -77,4 +77,6 @@
 
     <!--    to do fragment-->
 
+    <!--    form task fragment-->
+    <string name="text_toolbar_update_form_task_fragment">Editando tarefa</string>
 </resources>

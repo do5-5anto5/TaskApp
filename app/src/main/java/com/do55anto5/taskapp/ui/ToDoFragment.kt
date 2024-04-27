@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.do55anto5.taskapp.R
@@ -35,6 +36,8 @@ class ToDoFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var reference: DatabaseReference
 
+    private val viewModel: TaskViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -56,7 +59,31 @@ class ToDoFragment : Fragment() {
 
     private fun initListener() {
         bind.fabAdd.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_formTaskFragment)
+            val action = HomeFragmentDirections
+                .actionHomeFragmentToFormTaskFragment(null)
+            findNavController().navigate(action)
+        }
+
+        observeViewModel()
+    }
+
+    private fun observeViewModel(){
+        viewModel.taskUpdate.observe(viewLifecycleOwner) { updateTask ->
+            if(updateTask.status == Status.TODO) {
+
+                val adapterCurrentList = taskAdapter.currentList
+
+                val newListWithUpdatedTask = adapterCurrentList.toMutableList().apply {
+                    find { it.id == updateTask.id }?.description = updateTask.description
+                }
+
+                val storedPositionTaskToUpdate =
+                    newListWithUpdatedTask.indexOfFirst { it.id == updateTask.id }
+
+                taskAdapter.submitList(newListWithUpdatedTask)
+
+                taskAdapter.notifyItemChanged(storedPositionTaskToUpdate)
+            }
         }
     }
 
@@ -86,10 +113,9 @@ class ToDoFragment : Fragment() {
             }
 
             TaskAdapter.SELECT_EDIT -> {
-                Toast.makeText(
-                    requireContext(), "Editando ${task.description}", Toast.LENGTH_SHORT
-                )
-                    .show()
+                val action = HomeFragmentDirections
+                    .actionHomeFragmentToFormTaskFragment(task)
+                findNavController().navigate(action)
             }
 
             TaskAdapter.SELECT_DETAILS -> {

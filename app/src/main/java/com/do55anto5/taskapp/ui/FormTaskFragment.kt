@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.do55anto5.taskapp.R
 import com.do55anto5.taskapp.data.model.Status
 import com.do55anto5.taskapp.data.model.Task
@@ -29,8 +31,12 @@ class FormTaskFragment : Fragment() {
     private var status: Status = Status.TODO
     private var newTask: Boolean = true
 
+    private val args: FormTaskFragmentArgs by navArgs()
+
     private lateinit var auth: FirebaseAuth
     private lateinit var reference: DatabaseReference
+
+    private val viewModel: TaskViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +53,18 @@ class FormTaskFragment : Fragment() {
         auth = Firebase.auth
 
         initToolbar(bind.toolbar)
+        getArgs()
         initListeners()
+    }
+
+    private fun getArgs(){
+        args.task.let {
+            if (it !=null){
+            this.task = it
+
+                configTask()
+            }
+        }
     }
 
     private fun initListeners() {
@@ -63,6 +80,23 @@ class FormTaskFragment : Fragment() {
         }
     }
 
+    private fun configTask(){
+        newTask = false
+        status = task.status
+        bind.textToolbar.setText(R.string.text_toolbar_update_form_task_fragment)
+
+        bind.editDesc.setText(task.description)
+        setStatus()
+    }
+
+    private fun setStatus(){
+        bind.rgStatus.check(when(task.status){
+            Status.TODO -> R.id.rbTodo
+            Status.DOING -> R.id.rbDoing
+            else -> R.id.rbDone
+        })
+    }
+
     private fun validateData() {
         val description = bind.editDesc.text.toString().trim()
 
@@ -70,8 +104,10 @@ class FormTaskFragment : Fragment() {
 
             bind.progressBar.isVisible = true
 
-            if(newTask) task = Task()
-            task.id = reference.database.reference.push().key ?: ""
+            if(newTask) {
+                task = Task()
+                task.id = reference.database.reference.push().key ?: ""
+            }
 
             task.description = description
             task.status = status
@@ -96,9 +132,9 @@ class FormTaskFragment : Fragment() {
                     if (newTask){
                         findNavController().popBackStack()
                     } else {
-                        bind.progressBar.isVisible = false
+                        viewModel.setUpdateTask(task)
+                        findNavController().popBackStack()
                     }
-
                 } else {
                     bind.progressBar.isVisible = false
                     showBottomSheet(message = getString(R.string.generic_error))
