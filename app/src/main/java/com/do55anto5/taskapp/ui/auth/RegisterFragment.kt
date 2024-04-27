@@ -1,6 +1,7 @@
 package com.do55anto5.taskapp.ui.auth
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -72,6 +73,8 @@ class RegisterFragment : Fragment() {
 
                     findNavController().navigate(R.id.action_global_homeFragment)
                 } else {
+
+                    Log.i("INFOTEST", "loginUser: ${task.exception?.message}")
 
                     bind.progressBar.isVisible = false
 

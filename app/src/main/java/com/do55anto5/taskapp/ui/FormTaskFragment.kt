@@ -61,8 +61,7 @@ class FormTaskFragment : Fragment() {
         args.task.let {
             if (it !=null){
             this.task = it
-
-                configTask()
+            configTask()
             }
         }
     }

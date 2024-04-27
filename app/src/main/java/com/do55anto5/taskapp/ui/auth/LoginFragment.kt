@@ -1,6 +1,7 @@
 package com.do55anto5.taskapp.ui.auth
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -75,6 +76,8 @@ class LoginFragment : Fragment() {
                 if (task.isSuccessful) {
                     findNavController().navigate(R.id.action_global_homeFragment)
                 } else {
+                    Log.i("INFOTEST", "loginUser: ${task.exception?.message}")
+
                     bind.progressBar.isVisible = false
                     Toast.makeText(requireContext(), task.exception?.message, Toast.LENGTH_SHORT).show()
                 }
