@@ -14,13 +14,9 @@ import com.do55anto5.taskapp.R
 import com.do55anto5.taskapp.data.model.Status
 import com.do55anto5.taskapp.data.model.Task
 import com.do55anto5.taskapp.databinding.FragmentFormTaskBinding
+import com.do55anto5.taskapp.util.FirebaseHelper
 import com.do55anto5.taskapp.util.initToolbar
 import com.do55anto5.taskapp.util.showBottomSheet
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 
 class FormTaskFragment : Fragment() {
 
@@ -32,9 +28,6 @@ class FormTaskFragment : Fragment() {
     private var newTask: Boolean = true
 
     private val args: FormTaskFragmentArgs by navArgs()
-
-    private lateinit var auth: FirebaseAuth
-    private lateinit var reference: DatabaseReference
 
     private val viewModel: TaskViewModel by activityViewModels()
 
@@ -48,9 +41,6 @@ class FormTaskFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        reference = Firebase.database.reference
-        auth = Firebase.auth
 
         initToolbar(bind.toolbar)
         getArgs()
@@ -103,11 +93,7 @@ class FormTaskFragment : Fragment() {
 
             bind.progressBar.isVisible = true
 
-            if(newTask) {
-                task = Task()
-                task.id = reference.database.reference.push().key ?: ""
-            }
-
+            if(newTask) task = Task()
             task.description = description
             task.status = status
 
@@ -119,9 +105,9 @@ class FormTaskFragment : Fragment() {
     }
 
     private fun saveTask () {
-        reference
+        FirebaseHelper.getDatabase()
             .child("tasks")
-            .child(auth.currentUser?.uid ?: "")
+            .child(FirebaseHelper.getUserId())
             .child(task.id)
             .setValue(task).addOnCompleteListener { result ->
                 if (result.isSuccessful){

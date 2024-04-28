@@ -15,15 +15,11 @@ import com.do55anto5.taskapp.data.model.Status
 import com.do55anto5.taskapp.data.model.Task
 import com.do55anto5.taskapp.databinding.FragmentToDoBinding
 import com.do55anto5.taskapp.ui.adapter.TaskAdapter
+import com.do55anto5.taskapp.util.FirebaseHelper
 import com.do55anto5.taskapp.util.showBottomSheet
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 
 
 class ToDoFragment : Fragment() {
@@ -32,9 +28,6 @@ class ToDoFragment : Fragment() {
     private val bind get() = _bind!!
 
     private lateinit var taskAdapter: TaskAdapter
-
-    private lateinit var auth: FirebaseAuth
-    private lateinit var reference: DatabaseReference
 
     private val viewModel: TaskViewModel by activityViewModels()
 
@@ -47,9 +40,6 @@ class ToDoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        reference = Firebase.database.reference
-        auth = Firebase.auth
 
         initListener()
 
@@ -134,9 +124,9 @@ class ToDoFragment : Fragment() {
     }
 
     private fun getTasks(){
-        reference
+        FirebaseHelper.getDatabase()
             .child("tasks")
-            .child(auth.currentUser?.uid ?: "")
+            .child(FirebaseHelper.getUserId())
             .addValueEventListener(object: ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val taskList = mutableListOf<Task>()
@@ -162,9 +152,9 @@ class ToDoFragment : Fragment() {
     }
 
     private fun deleteTask(task: Task){
-        reference
+        FirebaseHelper.getDatabase()
             .child("tasks")
-            .child(auth.currentUser?.uid ?: "")
+            .child(FirebaseHelper.getUserId())
             .child(task.id)
             .removeValue().addOnCompleteListener {result ->
                 if (result.isSuccessful){

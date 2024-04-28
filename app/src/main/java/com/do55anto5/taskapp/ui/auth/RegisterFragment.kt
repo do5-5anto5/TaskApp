@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.do55anto5.taskapp.R
 import com.do55anto5.taskapp.databinding.FragmentRegisterBinding
+import com.do55anto5.taskapp.util.FirebaseHelper
 import com.do55anto5.taskapp.util.initToolbar
 import com.do55anto5.taskapp.util.showBottomSheet
 import com.google.firebase.auth.FirebaseAuth
@@ -78,8 +79,9 @@ class RegisterFragment : Fragment() {
 
                     bind.progressBar.isVisible = false
 
-                    Toast.makeText(requireContext(), task.exception?.message,
-                        Toast.LENGTH_SHORT).show()
+                    showBottomSheet(message = getString(
+                        FirebaseHelper.translateFirebaseAuthErrorMessagesToPortuguese(
+                            task.exception?.message.toString())))
                 }
             }
     }

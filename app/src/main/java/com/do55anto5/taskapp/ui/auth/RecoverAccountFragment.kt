@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.do55anto5.taskapp.R
 import com.do55anto5.taskapp.databinding.FragmentRecoverAccountBinding
+import com.do55anto5.taskapp.util.FirebaseHelper
 import com.do55anto5.taskapp.util.initToolbar
 import com.do55anto5.taskapp.util.showBottomSheet
 import com.google.firebase.auth.FirebaseAuth
@@ -65,7 +65,9 @@ class RecoverAccountFragment : Fragment() {
                     showBottomSheet(
                         message = getString(R.string.dialog_recover_account))
                 } else {
-                    Toast.makeText(requireContext(), task.exception?.message, Toast.LENGTH_SHORT).show()
+                    showBottomSheet(message = getString(
+                        FirebaseHelper.translateFirebaseAuthErrorMessagesToPortuguese(
+                            task.exception?.message.toString())))
                 }
             }
     }

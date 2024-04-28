@@ -1,16 +1,15 @@
 package com.do55anto5.taskapp.ui.auth
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.do55anto5.taskapp.R
 import com.do55anto5.taskapp.databinding.FragmentLoginBinding
+import com.do55anto5.taskapp.util.FirebaseHelper
 import com.do55anto5.taskapp.util.showBottomSheet
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -76,10 +75,11 @@ class LoginFragment : Fragment() {
                 if (task.isSuccessful) {
                     findNavController().navigate(R.id.action_global_homeFragment)
                 } else {
-                    Log.i("INFOTEST", "loginUser: ${task.exception?.message}")
-
                     bind.progressBar.isVisible = false
-                    Toast.makeText(requireContext(), task.exception?.message, Toast.LENGTH_SHORT).show()
+
+                    showBottomSheet(message = getString(
+                        FirebaseHelper.translateFirebaseAuthErrorMessagesToPortuguese(
+                            task.exception?.message.toString())))
                 }
             }
     }
