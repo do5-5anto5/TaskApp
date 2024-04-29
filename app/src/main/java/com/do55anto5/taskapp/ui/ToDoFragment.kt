@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.do55anto5.taskapp.R
 import com.do55anto5.taskapp.data.model.Status
 import com.do55anto5.taskapp.data.model.Task
@@ -43,7 +44,6 @@ class ToDoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initListener()
-
         initRecyclerView()
         getTasks()
     }
@@ -59,6 +59,21 @@ class ToDoFragment : Fragment() {
     }
 
     private fun observeViewModel(){
+        viewModel.taskInsert.observe(viewLifecycleOwner) { task ->
+            if (task.status == Status.TODO) {
+
+                val adapterCurrentList = taskAdapter.currentList
+
+                val newListWithUpdatedTask = adapterCurrentList.toMutableList().apply {
+                    add(0, task)
+                }
+
+                taskAdapter.submitList(newListWithUpdatedTask)
+
+                setPositionRecyclerView()
+            }
+        }
+
         viewModel.taskUpdate.observe(viewLifecycleOwner) { updateTask ->
             if(updateTask.status == Status.TODO) {
 
@@ -127,7 +142,7 @@ class ToDoFragment : Fragment() {
         FirebaseHelper.getDatabase()
             .child("tasks")
             .child(FirebaseHelper.getUserId())
-            .addValueEventListener(object: ValueEventListener{
+            .addListenerForSingleValueEvent(object: ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val taskList = mutableListOf<Task>()
                     for (ds in snapshot.children){
@@ -149,6 +164,14 @@ class ToDoFragment : Fragment() {
                 }
 
             })
+    }
+
+    private fun setPositionRecyclerView(){
+        taskAdapter.registerAdapterDataObserver(object: RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                bind.rvTasks.scrollToPosition(0)
+            }
+        })
     }
 
     private fun deleteTask(task: Task){

@@ -13,7 +13,6 @@ import com.do55anto5.taskapp.R
 import com.do55anto5.taskapp.data.model.Status
 import com.do55anto5.taskapp.data.model.Task
 import com.do55anto5.taskapp.databinding.FragmentFormTaskBinding
-import com.do55anto5.taskapp.util.FirebaseHelper
 import com.do55anto5.taskapp.util.initToolbar
 import com.do55anto5.taskapp.util.showBottomSheet
 
@@ -57,7 +56,11 @@ class FormTaskFragment : BaseFragment() {
 
     private fun initListeners() {
 
-        bind.btnSave.setOnClickListener { validateData() }
+        bind.btnSave.setOnClickListener {
+            observeViewModel()
+
+            validateData()
+        }
 
         bind.rgStatus.setOnCheckedChangeListener { _, id ->
             status = when (id) {
@@ -65,6 +68,17 @@ class FormTaskFragment : BaseFragment() {
                 R.id.rbDoing -> Status.DOING
                 else -> Status.DONE
             }
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.taskInsert.observe(viewLifecycleOwner) { task ->
+            Toast.makeText(requireContext(),
+                R.string.dialog_save_success_form_task_fragment,
+                Toast.LENGTH_SHORT
+            ).show()
+
+            findNavController().popBackStack()
         }
     }
 
@@ -100,36 +114,15 @@ class FormTaskFragment : BaseFragment() {
             task.description = description
             task.status = status
 
-            saveTask()
+            if(newTask){
+                viewModel.taskInsert(task)
+            } else {
+//                viewModel.updateTask(task)
+            }
 
         } else {
             showBottomSheet(message = getString(R.string.editDesc_isEmpty))
         }
-    }
-
-    private fun saveTask() {
-        FirebaseHelper.getDatabase()
-            .child("tasks")
-            .child(FirebaseHelper.getUserId())
-            .child(task.id)
-            .setValue(task).addOnCompleteListener { result ->
-                if (result.isSuccessful) {
-                    Toast.makeText(
-                        requireContext(), R.string.dialog_save_success_form_task_fragment,
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    if (newTask) {
-                        findNavController().popBackStack()
-                    } else {
-                        viewModel.setUpdateTask(task)
-                        findNavController().popBackStack()
-                    }
-                } else {
-                    bind.progressBar.isVisible = false
-                    showBottomSheet(message = getString(R.string.generic_error))
-                }
-            }
     }
 
     override fun onDestroy() {
