@@ -59,6 +59,7 @@ class ToDoFragment : Fragment() {
     }
 
     private fun observeViewModel(){
+
         viewModel.taskList.observe(viewLifecycleOwner) { taskList ->
             bind.progressBar.isVisible = false
             listEmpty(taskList)
@@ -82,21 +83,23 @@ class ToDoFragment : Fragment() {
         }
 
         viewModel.taskUpdate.observe(viewLifecycleOwner) { updateTask ->
-            if(updateTask.status == Status.TODO) {
 
-                val adapterCurrentList = taskAdapter.currentList
+            val adapterCurrentList = taskAdapter.currentList
 
-                val newListWithUpdatedTask = adapterCurrentList.toMutableList().apply {
-                    find { it.id == updateTask.id }?.description = updateTask.description
-                }
-
-                val storedPositionTaskToUpdate =
-                    newListWithUpdatedTask.indexOfFirst { it.id == updateTask.id }
-
-                taskAdapter.submitList(newListWithUpdatedTask)
-
-                taskAdapter.notifyItemChanged(storedPositionTaskToUpdate)
+            val newListWithUpdatedTask = adapterCurrentList.toMutableList().apply {
+               if (updateTask.status == Status.TODO){
+                   find { it.id == updateTask.id }?.description = updateTask.description
+               } else {
+                   remove(updateTask)
+               }
             }
+
+            val storedPositionTaskToUpdate =
+                newListWithUpdatedTask.indexOfFirst { it.id == updateTask.id }
+
+            taskAdapter.submitList(newListWithUpdatedTask)
+
+            taskAdapter.notifyItemChanged(storedPositionTaskToUpdate)
         }
     }
 
@@ -133,14 +136,14 @@ class ToDoFragment : Fragment() {
 
             TaskAdapter.SELECT_DETAILS -> {
                 Toast.makeText(
-                    requireContext(), "Detalhes ${task.description}", Toast.LENGTH_SHORT
+                    requireContext(), "Detalhes: ${task.description}", Toast.LENGTH_SHORT
                 )
                     .show()
             }
 
             TaskAdapter.SELECT_NEXT -> {
                 task.status = Status.DOING
-                updateTask(task)
+                viewModel.updateTask(task)
             }
         }
     }
@@ -163,25 +166,6 @@ class ToDoFragment : Fragment() {
                     Toast.makeText(
                         requireContext(),
                         R.string.text_success_delete_task,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    Toast.makeText(requireContext(), R.string.generic_error, Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
-    }
-
-    private fun updateTask(task: Task) {
-        FirebaseHelper.getDatabase()
-            .child("tasks")
-            .child(FirebaseHelper.getUserId())
-            .child(task.id)
-            .setValue(task).addOnCompleteListener { result ->
-                if (result.isSuccessful) {
-                    Toast.makeText(
-                        requireContext(),
-                        R.string.dialog_update_success,
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {

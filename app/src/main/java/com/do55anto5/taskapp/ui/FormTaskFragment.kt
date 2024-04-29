@@ -72,6 +72,7 @@ class FormTaskFragment : BaseFragment() {
     }
 
     private fun observeViewModel() {
+
         viewModel.taskInsert.observe(viewLifecycleOwner) { task ->
             Toast.makeText(requireContext(),
                 R.string.dialog_save_success_form_task_fragment,
@@ -79,6 +80,15 @@ class FormTaskFragment : BaseFragment() {
             ).show()
 
             findNavController().popBackStack()
+        }
+
+        viewModel.taskUpdate.observe(viewLifecycleOwner) { task ->
+            Toast.makeText(requireContext(),
+                R.string.dialog_update_success,
+                Toast.LENGTH_SHORT
+            ).show()
+
+            bind.progressBar.isVisible = false
         }
     }
 
@@ -115,9 +125,9 @@ class FormTaskFragment : BaseFragment() {
             task.status = status
 
             if(newTask){
-                viewModel.taskInsert(task)
+                viewModel.insertTask(task)
             } else {
-//                viewModel.updateTask(task)
+                viewModel.updateTask(task)
             }
 
         } else {

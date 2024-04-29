@@ -41,7 +41,9 @@ class DoingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         observeViewModel()
+
         initRecyclerView()
+
         getTasks()
     }
 
