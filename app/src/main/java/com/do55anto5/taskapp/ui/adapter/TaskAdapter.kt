@@ -90,6 +90,7 @@ class TaskAdapter(
 
                 with (holder.bind){
                     btnNext.isVisible = false
+
                     btnBack.setOnClickListener { selectedTask(task, SELECT_BACK) }
                 }
             }

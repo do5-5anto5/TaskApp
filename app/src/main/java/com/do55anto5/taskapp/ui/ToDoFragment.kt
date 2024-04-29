@@ -116,9 +116,8 @@ class ToDoFragment : Fragment() {
             }
 
             TaskAdapter.SELECT_NEXT -> {
-                Toast.makeText(
-                    requireContext(), "Próximo ${task.description}", Toast.LENGTH_SHORT
-                ).show()
+                task.status = Status.DOING
+                updateTask(task)
             }
         }
     }
@@ -156,11 +155,35 @@ class ToDoFragment : Fragment() {
             .child("tasks")
             .child(FirebaseHelper.getUserId())
             .child(task.id)
-            .removeValue().addOnCompleteListener {result ->
-                if (result.isSuccessful){
-                    Toast.makeText(requireContext(), R.string.text_success_delete_task, Toast.LENGTH_SHORT).show()
+            .removeValue().addOnCompleteListener { result ->
+                if (result.isSuccessful) {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.text_success_delete_task,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
-                    Toast.makeText(requireContext(), R.string.generic_error, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), R.string.generic_error, Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+    }
+
+    private fun updateTask(task: Task) {
+        FirebaseHelper.getDatabase()
+            .child("tasks")
+            .child(FirebaseHelper.getUserId())
+            .child(task.id)
+            .setValue(task).addOnCompleteListener { result ->
+                if (result.isSuccessful) {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.dialog_update_success,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(requireContext(), R.string.generic_error, Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
     }

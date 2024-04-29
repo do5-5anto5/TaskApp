@@ -5,12 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.do55anto5.taskapp.R
 import com.do55anto5.taskapp.data.model.Status
 import com.do55anto5.taskapp.data.model.Task
 import com.do55anto5.taskapp.databinding.FragmentDoneBinding
 import com.do55anto5.taskapp.ui.adapter.TaskAdapter
+import com.do55anto5.taskapp.util.FirebaseHelper
+import com.do55anto5.taskapp.util.showBottomSheet
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 
 class DoneFragment : Fragment() {
 
@@ -18,6 +27,8 @@ class DoneFragment : Fragment() {
     private val bind get() = _bind!!
 
     private lateinit var taskAdapter: TaskAdapter
+
+    private val viewModel: TaskViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,8 +41,29 @@ class DoneFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        observeViewModel()
         initRecyclerView()
         getTasks()
+    }
+
+    private fun observeViewModel(){
+        viewModel.taskUpdate.observe(viewLifecycleOwner) { updateTask ->
+            if(updateTask.status == Status.DOING) {
+
+                val adapterCurrentList = taskAdapter.currentList
+
+                val newListWithUpdatedTask = adapterCurrentList.toMutableList().apply {
+                    find { it.id == updateTask.id }?.description = updateTask.description
+                }
+
+                val storedPositionTaskToUpdate =
+                    newListWithUpdatedTask.indexOfFirst { it.id == updateTask.id }
+
+                taskAdapter.submitList(newListWithUpdatedTask)
+
+                taskAdapter.notifyItemChanged(storedPositionTaskToUpdate)
+            }
+        }
     }
 
     private fun initRecyclerView() {
@@ -49,23 +81,25 @@ class DoneFragment : Fragment() {
     private fun selectedOption(task: Task, option: Int) {
         when (option) {
             TaskAdapter.SELECT_BACK -> {
-                Toast.makeText(
-                    requireContext(), "Voltando ${task.description}", Toast.LENGTH_SHORT)
-                    .show()
+                task.status = Status.DOING
+                updateTask(task)
             }
 
             TaskAdapter.SELECT_REMOVE -> {
-                Toast.makeText(
-                    requireContext(),
-                    "Removendo ${task.description}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                showBottomSheet(
+                    titleDialog = R.string.text_title_dialog_delete,
+                    titleButton = R.string.text_dialog_button_confirm,
+                    message = getString(R.string.text_message_dialog_delete),
+                    onClick = {
+                        deleteTask(task)
+                    }
+                )
             }
 
             TaskAdapter.SELECT_EDIT -> {
-                Toast.makeText(
-                    requireContext(), "Editando ${task.description}", Toast.LENGTH_SHORT)
-                    .show()
+                val action = HomeFragmentDirections
+                    .actionHomeFragmentToFormTaskFragment(task)
+                findNavController().navigate(action)
             }
 
             TaskAdapter.SELECT_DETAILS -> {
@@ -77,15 +111,80 @@ class DoneFragment : Fragment() {
     }
 
     private fun getTasks(){
-        val taskList = listOf(
-        Task("0", "Criar adapter de contatos", Status.DONE),
-        Task("1", "Criar dialog padrão para o app", Status.DONE),
-        Task("2", "Refatorar código da classe de tarefas", Status.DONE),
-        Task("3", "Publicar app na loja", Status.DONE),
-        Task("4", "Atualizar dependêcias do app", Status.DONE)
-     )
+        FirebaseHelper.getDatabase()
+            .child("tasks")
+            .child(FirebaseHelper.getUserId())
+            .addValueEventListener(object: ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val taskList = mutableListOf<Task>()
+                    for (ds in snapshot.children){
+                        val task = ds.getValue(Task::class.java) as Task
+                        if (task.status == Status.DONE){
+                            taskList.add(task)
+                        }
+                    }
 
-        taskAdapter.submitList(taskList)
+                    bind.progressBar.isVisible = false
+                    listEmpty(taskList)
+
+                    taskList.reverse()
+                    taskAdapter.submitList(taskList)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(requireContext(),
+                        R.string.generic_error,
+                        Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+            })
+    }
+
+    private fun deleteTask(task: Task){
+        FirebaseHelper.getDatabase()
+            .child("tasks")
+            .child(FirebaseHelper.getUserId())
+            .child(task.id)
+            .removeValue().addOnCompleteListener { result ->
+                if (result.isSuccessful) {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.text_success_delete_task,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(requireContext(), R.string.generic_error, Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+    }
+
+    private fun updateTask(task: Task) {
+        FirebaseHelper.getDatabase()
+            .child("tasks")
+            .child(FirebaseHelper.getUserId())
+            .child(task.id)
+            .setValue(task).addOnCompleteListener { result ->
+                if (result.isSuccessful) {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.dialog_update_success,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(requireContext(), R.string.generic_error, Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+    }
+
+    private fun listEmpty(taskList: List<Task>){
+        bind.textInfo.text = if(taskList.isEmpty()){
+            getString(R.string.text_task_list_empty)
+        } else {
+            ""
+        }
     }
 
     override fun onDestroy() {

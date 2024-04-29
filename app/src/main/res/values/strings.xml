@@ -8,6 +8,7 @@
     <string name="text_dialog_button_confirm">Confirmar</string>
     <string name="text_title_dialog_delete">Deseja remover esta tarefa?</string>
     <string name="text_message_dialog_delete">Cliquem em confirmar para remover a tarefa.</string>
+    <string name="dialog_update_success">Tarefa atualizada com sucesso</string>
 
     <!--    labels-->
     <string name="app_name">TaskApp</string>
