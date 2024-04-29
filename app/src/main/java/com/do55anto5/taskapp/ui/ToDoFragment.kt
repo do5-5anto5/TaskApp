@@ -101,6 +101,21 @@ class ToDoFragment : Fragment() {
 
             taskAdapter.notifyItemChanged(storedPositionTaskToUpdate)
         }
+
+        viewModel.taskDelete.observe(viewLifecycleOwner) { task ->
+            Toast.makeText(requireContext(),
+                R.string.text_success_delete_task,
+                Toast.LENGTH_SHORT
+            ).show()
+
+            val adapterCurrentList = taskAdapter.currentList
+            val newListWithUpdatedTask = adapterCurrentList.toMutableList().apply {
+                remove(task)
+            }
+
+            taskAdapter.submitList(newListWithUpdatedTask)
+        }
+
     }
 
     private fun initRecyclerView() {
@@ -123,7 +138,7 @@ class ToDoFragment : Fragment() {
                     titleButton = R.string.text_dialog_button_confirm,
                     message = getString(R.string.text_message_dialog_delete),
                     onClick = {
-                        deleteTask(task)
+                        viewModel.deleteTask(task)
                     }
                 )
             }
@@ -154,25 +169,6 @@ class ToDoFragment : Fragment() {
                 bind.rvTasks.scrollToPosition(0)
             }
         })
-    }
-
-    private fun deleteTask(task: Task){
-        FirebaseHelper.getDatabase()
-            .child("tasks")
-            .child(FirebaseHelper.getUserId())
-            .child(task.id)
-            .removeValue().addOnCompleteListener { result ->
-                if (result.isSuccessful) {
-                    Toast.makeText(
-                        requireContext(),
-                        R.string.text_success_delete_task,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    Toast.makeText(requireContext(), R.string.generic_error, Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
     }
 
     private fun listEmpty(taskList: List<Task>){

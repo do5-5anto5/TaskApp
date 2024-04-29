@@ -1,9 +1,11 @@
 package com.do55anto5.taskapp.ui
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.do55anto5.taskapp.R
 import com.do55anto5.taskapp.data.model.Status
 import com.do55anto5.taskapp.data.model.Task
 import com.do55anto5.taskapp.util.FirebaseHelper
@@ -21,6 +23,9 @@ class TaskViewModel: ViewModel() {
 
     private val _taskUpdate = MutableLiveData<Task>()
     val taskUpdate: LiveData<Task> = _taskUpdate
+
+    private val _taskDelete = MutableLiveData<Task>()
+    val taskDelete: LiveData<Task> = _taskDelete
 
     fun getTasks(status: Status){
         FirebaseHelper.getDatabase()
@@ -77,4 +82,16 @@ class TaskViewModel: ViewModel() {
             }
     }
 
+    fun deleteTask(task: Task){
+        FirebaseHelper.getDatabase()
+            .child("tasks")
+            .child(FirebaseHelper.getUserId())
+            .child(task.id)
+            .removeValue().addOnCompleteListener { result ->
+                if (result.isSuccessful) {
+
+                    _taskDelete.postValue(task)
+                }
+            }
+    }
 }
