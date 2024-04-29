@@ -1,6 +1,7 @@
 package com.do55anto5.taskapp.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -144,7 +145,7 @@ class ToDoFragment : Fragment() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(requireContext(), R.string.generic_error, Toast.LENGTH_SHORT).show()
+                    Log.i("SEEkERROR", "onCanceled: ")
                 }
 
             })

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -18,7 +17,7 @@ import com.do55anto5.taskapp.util.FirebaseHelper
 import com.do55anto5.taskapp.util.initToolbar
 import com.do55anto5.taskapp.util.showBottomSheet
 
-class FormTaskFragment : Fragment() {
+class FormTaskFragment : BaseFragment() {
 
     private var _bind: FragmentFormTaskBinding? = null
     private val bind get() = _bind!!
@@ -47,11 +46,11 @@ class FormTaskFragment : Fragment() {
         initListeners()
     }
 
-    private fun getArgs(){
+    private fun getArgs() {
         args.task.let {
-            if (it !=null){
-            this.task = it
-            configTask()
+            if (it != null) {
+                this.task = it
+                configTask()
             }
         }
     }
@@ -61,7 +60,7 @@ class FormTaskFragment : Fragment() {
         bind.btnSave.setOnClickListener { validateData() }
 
         bind.rgStatus.setOnCheckedChangeListener { _, id ->
-            status = when(id){
+            status = when (id) {
                 R.id.rbTodo -> Status.TODO
                 R.id.rbDoing -> Status.DOING
                 else -> Status.DONE
@@ -69,7 +68,7 @@ class FormTaskFragment : Fragment() {
         }
     }
 
-    private fun configTask(){
+    private fun configTask() {
         newTask = false
         status = task.status
         bind.textToolbar.setText(R.string.text_toolbar_update_form_task_fragment)
@@ -78,22 +77,26 @@ class FormTaskFragment : Fragment() {
         setStatus()
     }
 
-    private fun setStatus(){
-        bind.rgStatus.check(when(task.status){
-            Status.TODO -> R.id.rbTodo
-            Status.DOING -> R.id.rbDoing
-            else -> R.id.rbDone
-        })
+    private fun setStatus() {
+        bind.rgStatus.check(
+            when (task.status) {
+                Status.TODO -> R.id.rbTodo
+                Status.DOING -> R.id.rbDoing
+                else -> R.id.rbDone
+            }
+        )
     }
 
     private fun validateData() {
         val description = bind.editDesc.text.toString().trim()
 
-        if (description.isNotEmpty()){
+        if (description.isNotEmpty()) {
+
+            hideKeyBoard()
 
             bind.progressBar.isVisible = true
 
-            if(newTask) task = Task()
+            if (newTask) task = Task()
             task.description = description
             task.status = status
 
@@ -104,17 +107,19 @@ class FormTaskFragment : Fragment() {
         }
     }
 
-    private fun saveTask () {
+    private fun saveTask() {
         FirebaseHelper.getDatabase()
             .child("tasks")
             .child(FirebaseHelper.getUserId())
             .child(task.id)
             .setValue(task).addOnCompleteListener { result ->
-                if (result.isSuccessful){
-                    Toast.makeText(requireContext(), R.string.dialog_save_success_form_task_fragment,
-                        Toast.LENGTH_SHORT).show()
+                if (result.isSuccessful) {
+                    Toast.makeText(
+                        requireContext(), R.string.dialog_save_success_form_task_fragment,
+                        Toast.LENGTH_SHORT
+                    ).show()
 
-                    if (newTask){
+                    if (newTask) {
                         findNavController().popBackStack()
                     } else {
                         viewModel.setUpdateTask(task)

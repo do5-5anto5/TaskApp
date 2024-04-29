@@ -82,7 +82,8 @@
                 android:background="@drawable/bg_edit_text"
                 android:hint="@string/edit_password"
                 android:inputType="textPassword"
-                android:padding="16dp" />
+                android:padding="16dp"
+                style="@style/EditTextTheme"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnRegister"
