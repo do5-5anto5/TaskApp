@@ -1,7 +1,6 @@
 package com.do55anto5.taskapp.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,9 +18,6 @@ import com.do55anto5.taskapp.databinding.FragmentToDoBinding
 import com.do55anto5.taskapp.ui.adapter.TaskAdapter
 import com.do55anto5.taskapp.util.FirebaseHelper
 import com.do55anto5.taskapp.util.showBottomSheet
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 
 
 class ToDoFragment : Fragment() {
@@ -44,8 +40,12 @@ class ToDoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initListener()
+
         initRecyclerView()
-        getTasks()
+
+        observeViewModel()
+
+        viewModel.getTasks(Status.TODO)
     }
 
     private fun initListener() {
@@ -59,6 +59,13 @@ class ToDoFragment : Fragment() {
     }
 
     private fun observeViewModel(){
+        viewModel.taskList.observe(viewLifecycleOwner) { taskList ->
+            bind.progressBar.isVisible = false
+            listEmpty(taskList)
+
+            taskAdapter.submitList(taskList)
+        }
+
         viewModel.taskInsert.observe(viewLifecycleOwner) { task ->
             if (task.status == Status.TODO) {
 
@@ -136,34 +143,6 @@ class ToDoFragment : Fragment() {
                 updateTask(task)
             }
         }
-    }
-
-    private fun getTasks(){
-        FirebaseHelper.getDatabase()
-            .child("tasks")
-            .child(FirebaseHelper.getUserId())
-            .addListenerForSingleValueEvent(object: ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val taskList = mutableListOf<Task>()
-                    for (ds in snapshot.children){
-                        val task = ds.getValue(Task::class.java) as Task
-                        if (task.status == Status.TODO){
-                        taskList.add(task)
-                        }
-                    }
-
-                    bind.progressBar.isVisible = false
-                    listEmpty(taskList)
-
-                    taskList.reverse()
-                    taskAdapter.submitList(taskList)
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Log.i("SEEkERROR", "onCanceled: ")
-                }
-
-            })
     }
 
     private fun setPositionRecyclerView(){
