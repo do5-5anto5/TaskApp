@@ -58,7 +58,7 @@ dependencies {
     //Room
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
-    annotationProcessor(libs.androidx.room.compiler)
+    kapt(libs.androidx.room.compiler)
 
     // Lifecycle components
     implementation (libs.androidx.lifecycle.viewmodel.ktx)
