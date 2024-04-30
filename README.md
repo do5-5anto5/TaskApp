@@ -33,6 +33,8 @@ an active project on Firebase platform connected with SHA1 to your local reposit
 
 This project is open source and you can contribute with suggestions, bug fixes or new features. For more information, please refer to the project's GitHub repository.
 
+## **30/04/2024/ - create storage-savant branch to explore intern device storage. Remove some resources in this branch, focus on inner storage**
+
 ### **Clone it with Git Bash**
 
 git clone https://github.com/do5-5anto5/TaskApp.git

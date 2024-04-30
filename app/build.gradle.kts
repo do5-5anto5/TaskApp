@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("kotlin-parcelize")
-    id("com.google.gms.google-services")
     id("androidx.navigation.safeargs.kotlin")
 }
 
@@ -54,11 +53,6 @@ dependencies {
     //navigation
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-
-    //firebase
-    implementation(platform(libs.firebase.bom))
-    implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.firebase:firebase-database")
 
     //test
     testImplementation(libs.junit)
