@@ -70,22 +70,10 @@
     <string name="dialog_title_confirm_logout">Deseja sair da sua conta?</string>
     <string name="dialog_message_confirm_logout">Clique em confirmar para sair da sua conta.</string>
 
-    <!--    recover fragment-->
-    <string name="dialog_recover_account">Pronto, acabamos de enviar um link de recuperação para o seu email</string>
-
     <!--    form task fragment-->
     <string name="dialog_save_success_form_task_fragment">Tarefa salva com sucesso</string>
 
-    <!--    to do fragment-->
-
     <!--    form task fragment-->
     <string name="text_toolbar_update_form_task_fragment">Editando tarefa</string>
-
-<!--    Firebase Authentication errors-->
-    <string name="error_supplied_credentials_incorrect_register_fragment">Usuário e/ou senha incorreto(s)</string>
-    <string name="error_account_not_registered_register_fragment">Nenhuma conta encontrada com este email.</string>
-    <string name="error_invalid_email_register_fragment">Insira um email válido</string>
-    <string name="error_invalid_password_register_fragment">Senha inválida, tente novamente.</string>
-    <string name="error_email_already_registered_register_fragment">Este email já está em uso.</string>
-    <string name="error_weak_password_register_fragment">Insira uma senha mais forte</string>
+    <string name="error_task_save">Erro ao salvar a tarefa</string>
 </resources>
