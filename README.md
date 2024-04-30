@@ -20,7 +20,8 @@ Programming Language: Kotlin
 Development Environment: Android Studio Iguana 2023.2.1
 **Libraries:**
 Data Binding
-Firebase
+Room
+Lifecycle
 Navigation Component
 Material Design Components
 
@@ -29,7 +30,6 @@ Material Design Components
 
 Android 7.0 or higher
 Open Source
-an active project on Firebase platform connected with SHA1 to your local repository
 
 This project is open source and you can contribute with suggestions, bug fixes or new features. For more information, please refer to the project's GitHub repository.
 
