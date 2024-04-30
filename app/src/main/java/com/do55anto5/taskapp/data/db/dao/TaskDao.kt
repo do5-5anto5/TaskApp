@@ -19,10 +19,10 @@ interface TaskDao {
     @Insert(onConflict = IGNORE)
     suspend fun insertTask(taskEntity: TaskEntity): Long
 
-    @Delete
+    @Query("DELETE FROM task_table WHERE id = :id")
     suspend fun deleteTask(id: Long)
 
-    @Update
+    @Query("UPDATE task_table SET description = :description, status = :status WHERE id = :id")
     suspend fun updateTask(
         id:Long,
         description: String,
