@@ -9,7 +9,6 @@ import com.do55anto5.taskapp.data.db.entity.toTaskEntity
 import com.do55anto5.taskapp.data.db.repository.TaskRepository
 import com.do55anto5.taskapp.data.model.Status
 import com.do55anto5.taskapp.data.model.Task
-import com.do55anto5.taskapp.util.StateView
 import kotlinx.coroutines.launch
 
 class TaskViewModel(private val repository: TaskRepository): ViewModel() {

@@ -1,29 +1,22 @@
 package com.do55anto5.taskapp.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.do55anto5.taskapp.R
 import com.do55anto5.taskapp.data.db.AppDatabase
 import com.do55anto5.taskapp.data.db.repository.TaskRepository
-import com.do55anto5.taskapp.data.model.Status
 import com.do55anto5.taskapp.data.model.Task
 import com.do55anto5.taskapp.databinding.FragmentTasksBinding
 import com.do55anto5.taskapp.ui.adapter.TaskAdapter
-import com.do55anto5.taskapp.util.StateView
-import com.do55anto5.taskapp.util.showBottomSheet
 
 
 class TasksFragment : Fragment() {
@@ -33,17 +26,17 @@ class TasksFragment : Fragment() {
 
     private lateinit var taskAdapter: TaskAdapter
 
-    private val viewModel: TaskViewModel by viewModels {
+    private val viewModel: TaskListViewModel by viewModels {
         object: ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                if (modelClass.isAssignableFrom(TaskViewModel::class.java)) {
+                if (modelClass.isAssignableFrom(TaskListViewModel::class.java)) {
 
                     val database = AppDatabase.getDatabase(requireContext())
 
                     val repository = TaskRepository(database.taskDao())
 
                     @Suppress("UNCHECKED_CAST")
-                    return TaskViewModel(repository) as T
+                    return TaskListViewModel(repository) as T
                 }
                 throw IllegalArgumentException("Unknown ViewModel class")
             }
@@ -65,8 +58,11 @@ class TasksFragment : Fragment() {
         initRecyclerView()
 
         observeViewModel()
+    }
 
-        viewModel.getTasks()
+    override fun onResume() {
+        super.onResume()
+        viewModel.getAllTasks()
     }
 
     private fun initListener() {
@@ -80,8 +76,10 @@ class TasksFragment : Fragment() {
     }
 
     private fun observeViewModel(){
-
-
+        viewModel.taskList.observe(viewLifecycleOwner) { taskList ->
+            taskAdapter.submitList(taskList)
+            listEmpty(taskList)
+        }
     }
 
     private fun initRecyclerView() {
@@ -97,39 +95,31 @@ class TasksFragment : Fragment() {
     }
 
     private fun selectedOption(task: Task, option: Int) {
-        when (option) {
-            TaskAdapter.SELECT_REMOVE -> {
-                showBottomSheet(
-                    titleDialog = R.string.text_title_dialog_delete,
-                    titleButton = R.string.text_dialog_button_confirm,
-                    message = getString(R.string.text_message_dialog_delete),
-                    onClick = {
-                        viewModel.deleteTask(task)
-                    }
-                )
-            }
-
-            TaskAdapter.SELECT_EDIT -> {
-                val action = TasksFragmentDirections
-                    .actionTasksFragmentToFormTaskFragment(task)
-                findNavController().navigate(action)
-            }
-
-            TaskAdapter.SELECT_DETAILS -> {
-                Toast.makeText(
-                    requireContext(), "Detalhes: ${task.description}", Toast.LENGTH_SHORT
-                )
-                    .show()
-            }
-        }
-    }
-
-    private fun setPositionRecyclerView(){
-        taskAdapter.registerAdapterDataObserver(object: RecyclerView.AdapterDataObserver() {
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                bind.rvTasks.scrollToPosition(0)
-            }
-        })
+//        when (option) {
+//            TaskAdapter.SELECT_REMOVE -> {
+//                showBottomSheet(
+//                    titleDialog = R.string.text_title_dialog_delete,
+//                    titleButton = R.string.text_dialog_button_confirm,
+//                    message = getString(R.string.text_message_dialog_delete),
+//                    onClick = {
+//                        viewModel.deleteTask(task)
+//                    }
+//                )
+//            }
+//
+//            TaskAdapter.SELECT_EDIT -> {
+//                val action = TasksFragmentDirections
+//                    .actionTasksFragmentToFormTaskFragment(task)
+//                findNavController().navigate(action)
+//            }
+//
+//            TaskAdapter.SELECT_DETAILS -> {
+//                Toast.makeText(
+//                    requireContext(), "Detalhes: ${task.description}", Toast.LENGTH_SHORT
+//                )
+//                    .show()
+//            }
+//        }
     }
 
     private fun listEmpty(taskList: List<Task>){
@@ -138,6 +128,7 @@ class TasksFragment : Fragment() {
         } else {
             ""
         }
+        bind.progressBar.isVisible = false
     }
 
     override fun onDestroy() {
