@@ -68,34 +68,6 @@ class DoingFragment : Fragment() {
             }
         }
 
-        viewModel.taskInsert.observe(viewLifecycleOwner) { stateView ->
-            when(stateView){
-                is StateView.OnLoading -> {
-                    bind.progressBar.isVisible = true
-                }
-                is StateView.OnSuccess -> {
-                    bind.progressBar.isVisible = false
-
-                    if (stateView.data?.status == Status.DOING) {
-
-                        val adapterCurrentList = taskAdapter.currentList
-
-                        val newListWithUpdatedTask = adapterCurrentList.toMutableList().apply {
-                            add(0, stateView.data)
-                        }
-
-                        taskAdapter.submitList(newListWithUpdatedTask)
-
-                        setPositionRecyclerView()
-                    }
-                }
-                is StateView.OnError -> {
-                    Toast.makeText(requireContext(), stateView.message, Toast.LENGTH_SHORT).show()
-                    bind.progressBar.isVisible = false
-                }
-            }
-        }
-
         viewModel.taskUpdate.observe(viewLifecycleOwner) { stateView ->
             when(stateView){
                 is StateView.OnLoading -> {
@@ -125,6 +97,8 @@ class DoingFragment : Fragment() {
                     taskAdapter.submitList(newListWithUpdatedTask)
 
                     taskAdapter.notifyItemChanged(storedPositionTaskToUpdate)
+
+                    listEmpty(newListWithUpdatedTask)
                 }
                 is StateView.OnError -> {
                     Toast.makeText(requireContext(), stateView.message, Toast.LENGTH_SHORT).show()
@@ -154,6 +128,8 @@ class DoingFragment : Fragment() {
                     }
 
                     taskAdapter.submitList(newListWithUpdatedTask)
+
+                    listEmpty(newListWithUpdatedTask)
                 }
                 is StateView.OnError -> {
                     bind.progressBar.isVisible = false

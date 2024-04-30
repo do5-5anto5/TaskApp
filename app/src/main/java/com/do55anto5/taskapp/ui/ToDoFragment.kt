@@ -141,6 +141,8 @@ class ToDoFragment : Fragment() {
                     taskAdapter.submitList(newListWithUpdatedTask)
 
                     taskAdapter.notifyItemChanged(storedPositionTaskToUpdate)
+
+                    listEmpty(newListWithUpdatedTask)
                 }
                 is StateView.OnError -> {
                     Toast.makeText(requireContext(), stateView.message, Toast.LENGTH_SHORT).show()
@@ -170,6 +172,8 @@ class ToDoFragment : Fragment() {
                     }
 
                     taskAdapter.submitList(newListWithUpdatedTask)
+
+                    listEmpty(newListWithUpdatedTask)
                 }
                 is StateView.OnError -> {
                     bind.progressBar.isVisible = false
