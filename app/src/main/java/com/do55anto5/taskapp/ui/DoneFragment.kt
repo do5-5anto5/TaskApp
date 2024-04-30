@@ -48,21 +48,21 @@ class DoneFragment : Fragment() {
 
     private fun observeViewModel(){
         viewModel.taskUpdate.observe(viewLifecycleOwner) { updateTask ->
-            if(updateTask.status == Status.DOING) {
-
-                val adapterCurrentList = taskAdapter.currentList
-
-                val newListWithUpdatedTask = adapterCurrentList.toMutableList().apply {
-                    find { it.id == updateTask.id }?.description = updateTask.description
-                }
-
-                val storedPositionTaskToUpdate =
-                    newListWithUpdatedTask.indexOfFirst { it.id == updateTask.id }
-
-                taskAdapter.submitList(newListWithUpdatedTask)
-
-                taskAdapter.notifyItemChanged(storedPositionTaskToUpdate)
-            }
+//            if(updateTask.status == Status.DOING) {
+//
+//                val adapterCurrentList = taskAdapter.currentList
+//
+//                val newListWithUpdatedTask = adapterCurrentList.toMutableList().apply {
+//                    find { it.id == updateTask.id }?.description = updateTask.description
+//                }
+//
+//                val storedPositionTaskToUpdate =
+//                    newListWithUpdatedTask.indexOfFirst { it.id == updateTask.id }
+//
+//                taskAdapter.submitList(newListWithUpdatedTask)
+//
+//                taskAdapter.notifyItemChanged(storedPositionTaskToUpdate)
+//            }
         }
     }
 

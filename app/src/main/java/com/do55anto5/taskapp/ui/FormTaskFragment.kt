@@ -41,7 +41,9 @@ class FormTaskFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initToolbar(bind.toolbar)
+
         getArgs()
+
         initListeners()
     }
 
