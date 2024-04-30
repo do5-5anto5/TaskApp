@@ -10,7 +10,7 @@ import com.do55anto5.taskapp.data.db.entity.TaskEntity
 @Database(entities = [TaskEntity::class], version = 1)
 public abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun tasDao(): TaskDao
+    abstract fun taskDao(): TaskDao
 
     companion object {
         @Volatile
