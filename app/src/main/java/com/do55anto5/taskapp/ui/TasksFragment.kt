@@ -18,6 +18,7 @@ import com.do55anto5.taskapp.data.db.repository.TaskRepository
 import com.do55anto5.taskapp.data.model.Task
 import com.do55anto5.taskapp.databinding.FragmentTasksBinding
 import com.do55anto5.taskapp.ui.adapter.TaskAdapter
+import com.do55anto5.taskapp.util.showBottomSheet
 
 
 class TasksFragment : Fragment() {
@@ -27,7 +28,7 @@ class TasksFragment : Fragment() {
 
     private lateinit var taskAdapter: TaskAdapter
 
-    private val viewModel: TaskListViewModel by viewModels {
+    private val taskListViewModel: TaskListViewModel by viewModels {
         object: ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(TaskListViewModel::class.java)) {
@@ -38,6 +39,23 @@ class TasksFragment : Fragment() {
 
                     @Suppress("UNCHECKED_CAST")
                     return TaskListViewModel(repository) as T
+                }
+                throw IllegalArgumentException("Unknown ViewModel class")
+            }
+        }
+    }
+
+    private val taskViewModel: TaskViewModel by viewModels {
+        object: ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                if (modelClass.isAssignableFrom(TaskViewModel::class.java)) {
+
+                    val database = AppDatabase.getDatabase(requireContext())
+
+                    val repository = TaskRepository(database.taskDao())
+
+                    @Suppress("UNCHECKED_CAST")
+                    return TaskViewModel(repository) as T
                 }
                 throw IllegalArgumentException("Unknown ViewModel class")
             }
@@ -63,7 +81,7 @@ class TasksFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.getAllTasks()
+        taskListViewModel.getAllTasks()
     }
 
     private fun initListener() {
@@ -77,9 +95,15 @@ class TasksFragment : Fragment() {
     }
 
     private fun observeViewModel(){
-        viewModel.taskList.observe(viewLifecycleOwner) { taskList ->
+        taskListViewModel.taskList.observe(viewLifecycleOwner) { taskList ->
             taskAdapter.submitList(taskList)
             listEmpty(taskList)
+        }
+
+        taskViewModel.taskStateData.observe(viewLifecycleOwner) { stateTask ->
+            if (stateTask == StateTask.Deleted) {
+                taskListViewModel.getAllTasks()
+            }
         }
     }
 
@@ -98,14 +122,14 @@ class TasksFragment : Fragment() {
     private fun selectedOption(task: Task, option: Int) {
         when (option) {
             TaskAdapter.SELECT_REMOVE -> {
-//                showBottomSheet(
-//                    titleDialog = R.string.text_title_dialog_delete,
-//                    titleButton = R.string.text_dialog_button_confirm,
-//                    message = getString(R.string.text_message_dialog_delete),
-//                    onClick = {
-//                        viewModel.deleteTask(task)
-//                    }
-//                )
+                showBottomSheet(
+                    titleDialog = R.string.text_title_dialog_delete,
+                    titleButton = R.string.text_dialog_button_confirm,
+                    message = getString(R.string.text_message_dialog_delete),
+                    onClick = {
+                        taskViewModel.deleteTask(task.id)
+                    }
+                )
             }
 
             TaskAdapter.SELECT_EDIT -> {

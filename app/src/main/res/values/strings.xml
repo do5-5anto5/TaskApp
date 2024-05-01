@@ -4,11 +4,9 @@
     <string name="generic_error">Ocorreu um erro. Por favor tente novamente mais tarde</string>
     <string name="text_task_list_empty">Nenhuma tarefa cadastrada</string>
     <string name="text_load_task_list">Carregando tarefas</string>
-    <string name="text_success_delete_task">Tarefa removida com sucesso </string>
     <string name="text_dialog_button_confirm">Confirmar</string>
     <string name="text_title_dialog_delete">Deseja remover esta tarefa?</string>
     <string name="text_message_dialog_delete">Cliquem em confirmar para remover a tarefa.</string>
-    <string name="dialog_update_success">Tarefa atualizada com sucesso</string>
 
     <!--    labels-->
     <string name="app_name">TaskApp</string>
@@ -71,10 +69,11 @@
     <string name="dialog_message_confirm_logout">Clique em confirmar para sair da sua conta.</string>
 
     <!--    form task fragment-->
-    <string name="dialog_save_success_form_task_fragment">Tarefa salva com sucesso</string>
-
-    <!--    form task fragment-->
     <string name="text_toolbar_update_form_task_fragment">Editando tarefa</string>
+    <string name="dialog_save_success_form_task_fragment">Tarefa salva com sucesso</string>
+    <string name="dialog_update_success">Tarefa atualizada com sucesso</string>
+    <string name="dialog_delete_success">Tarefa removida com sucesso</string>
     <string name="error_task_save">Erro ao salvar a tarefa</string>
     <string name="error_task_update">Erro ao atualizar a tarefa</string>
+    <string name="error_task_delete">Erro ao deletar a tarefa</string>
 </resources>
