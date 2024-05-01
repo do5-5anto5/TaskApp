@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -95,8 +96,8 @@ class TasksFragment : Fragment() {
     }
 
     private fun selectedOption(task: Task, option: Int) {
-//        when (option) {
-//            TaskAdapter.SELECT_REMOVE -> {
+        when (option) {
+            TaskAdapter.SELECT_REMOVE -> {
 //                showBottomSheet(
 //                    titleDialog = R.string.text_title_dialog_delete,
 //                    titleButton = R.string.text_dialog_button_confirm,
@@ -105,21 +106,21 @@ class TasksFragment : Fragment() {
 //                        viewModel.deleteTask(task)
 //                    }
 //                )
-//            }
-//
-//            TaskAdapter.SELECT_EDIT -> {
-//                val action = TasksFragmentDirections
-//                    .actionTasksFragmentToFormTaskFragment(task)
-//                findNavController().navigate(action)
-//            }
-//
-//            TaskAdapter.SELECT_DETAILS -> {
-//                Toast.makeText(
-//                    requireContext(), "Detalhes: ${task.description}", Toast.LENGTH_SHORT
-//                )
-//                    .show()
-//            }
-//        }
+            }
+
+            TaskAdapter.SELECT_EDIT -> {
+                val action = TasksFragmentDirections
+                    .actionTasksFragmentToFormTaskFragment(task)
+                findNavController().navigate(action)
+            }
+
+            TaskAdapter.SELECT_DETAILS -> {
+                Toast.makeText(
+                    requireContext(), "Detalhes: ${task.description}", Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+        }
     }
 
     private fun listEmpty(taskList: List<Task>){

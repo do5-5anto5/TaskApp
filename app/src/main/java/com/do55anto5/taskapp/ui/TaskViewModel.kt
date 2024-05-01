@@ -49,15 +49,13 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel() {
     private fun updateTask(task: Task) = viewModelScope.launch {
         try {
 
-            val id = repository.insertTask(task.toTaskEntity())
-            if (id > 0) {
-                _taskStateData.postValue(StateTask.Inserted)
-                _taskStateMessage.postValue(R.string.dialog_update_success)
+            repository.updateTask(task.toTaskEntity())
 
-            }
+            _taskStateData.postValue(StateTask.Inserted)
+            _taskStateMessage.postValue(R.string.dialog_update_success)
 
         } catch (e: Exception){
-            _taskStateMessage.postValue(R.string.error_task_save)
+            _taskStateMessage.postValue(R.string.error_task_update)
         }
     }
 
